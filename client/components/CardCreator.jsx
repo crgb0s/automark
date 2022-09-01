@@ -26,6 +26,11 @@ function CardCreator(props) {
     }
   };
 
+  const handleSubmit2 = (e) => {
+    e.preventDefault();
+    console.log('hi we are inside handleSubmit2');
+  }
+
   return (
     <section id="cardCreator">
       <section className='horizontal-form'>

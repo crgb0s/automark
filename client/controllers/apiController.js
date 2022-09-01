@@ -22,9 +22,23 @@ const nhtsaPopulate = (vin) => {
     .then((output) => Object.assign({ vin }, output));
 }
 
+const EDMUNDS_BASE = 'https://www.edmunds.com'
+
+const edmundsPopulate = (payload) => {
+  const {make, model, year, vin} = payload;
+  const edmundsUrl = EDMUNDS_BASE + `/${make.toLowerCase()}/${model.toLowerCase()}/${year}/vin/${vin}/`;
+  return fetch(edmundsUrl)
+    .then(resp => {
+      if(resp.ok) return {...payload, edmundsUrl};
+      return {...payload};
+    });
+}
+
 
 console.log(nhtsaPopulate('4S4BSETC9K3341075'))
 
 export const addCar = (vin) => {
-  return nhtsaPopulate(vin).then((payload) => addCarActionCreator(payload));
+  return nhtsaPopulate(vin)
+    // .then((payload) => edmundsPopulate(payload))
+    .then((payload) => addCarActionCreator(payload));
 }

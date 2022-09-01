@@ -1,11 +1,22 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const fetch = require('node-fetch');
+const proxyController = require ('./proxyController')
+const parseController = require ('./parseController')
 
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use('/sources/*', proxyController.validateRequest, proxyController.proxyRequest, parseController.parseEdmundsListing, (req, res) => {
+  let resHeaders = res.locals.headers;
+  res.locals.headers.forEach(([header, value]) => res.header(header, value));
+  console.log(res.locals.parsed);
+  const response = res.locals.parsed;
+  res.status(res.locals.status).json(response);
+})
 
 app.get('/static/style.css', (req, res)=> {
   return res.status(200).sendFile(path.join(__dirname, '../client/style.css'));
@@ -15,7 +26,10 @@ app.get('/favicon.ico', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../client/assets/favicon.ico'));
 })
 
-app.use((req, res) => res.sendStatus(404));
+app.use((req, res) => {
+  console.log(req.originalUrl);
+  return res.sendStatus(404)
+});
 
 app.use((err, req, res, next) => {
   const defaultErr = {
