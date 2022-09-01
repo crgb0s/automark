@@ -1,6 +1,3 @@
-import { addCarActionCreator, updateCarActionCreator } from '../actions/actions.js';
-
-
 const NHTSA_URL = "https://vpic.nhtsa.dot.gov/api/vehicles";
 const DEFAULT_OPTIONS = "?format=json";
 
@@ -51,8 +48,7 @@ const edmundsPopulate = (car) => {
 
 console.log(nhtsaPopulate('4S4BSETC9K3341075'))
 
-export const addCar = (vin) => {
+export const fetchCarDetails = (vin) => {
   return nhtsaPopulate(vin)
     .then(payload => edmundsPopulate(payload))
-    .then(payload => addCarActionCreator(payload));
-}
+};

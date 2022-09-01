@@ -1,14 +1,27 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const fetch = require('node-fetch');
-const proxyController = require ('./proxyController')
-const parseController = require ('./parseController')
+const proxyController = require ('./controllers/proxyController')
+const parseController = require ('./controllers/parseController')
+const sessionRouter = require ('./routers/sessionRouter')
+
+const mongoose = require('mongoose');
+const fs = require('fs');
+const {dbUser, dbPassword, dbURL} = require ('./private.js');
+
+const connectionString = `mongodb+srv://${dbUser}:${dbPassword}@${dbURL}/automark?retryWrites=true&w=majority`;
+console.log({connectionString});
+mongoose.connect(connectionString);
+
+mongoose.connection.once('open', () => {
+  console.log('Connected to Database');
+});
 
 const PORT = 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 app.use('/sources/*', proxyController.validateRequest, proxyController.proxyRequest, parseController.parseEdmundsListing, (req, res) => {
   let resHeaders = res.locals.headers;
@@ -17,6 +30,8 @@ app.use('/sources/*', proxyController.validateRequest, proxyController.proxyRequ
   const response = res.locals.parsed;
   res.status(res.locals.status).json(response);
 })
+
+app.use('/session', sessionRouter);
 
 app.get('/static/style.css', (req, res)=> {
   return res.status(200).sendFile(path.join(__dirname, '../client/style.css'));
@@ -27,7 +42,6 @@ app.get('/favicon.ico', (req, res) => {
 })
 
 app.use((req, res) => {
-  console.log(req.originalUrl);
   return res.sendStatus(404)
 });
 

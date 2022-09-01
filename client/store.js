@@ -26,5 +26,6 @@
    devTools: process.env.NODE_ENV !== 'production',
    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(vanillaPromise),
   });
+
  
  export default store;

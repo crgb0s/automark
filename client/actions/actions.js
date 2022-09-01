@@ -32,3 +32,18 @@ export const updateCarActionCreator = updates => ({
   type: types.UPDATE_CAR,
   payload: updates
 });
+
+export const changeSessionIdActionCreator = sessionId => ({
+  type: types.CHANGE_SESSION_ID,
+  payload: sessionId
+});
+
+export const changeNewSessionIdActionCreator = newSessionId => ({
+  type: types.CHANGE_NEW_SESSION_ID,
+  payload: newSessionId
+});
+
+export const loadCarsActionCreator = cars => ({
+  type: types.LOAD_CARS,
+  payload: cars
+});

@@ -1,18 +1,25 @@
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { changeNewVINActionCreator } from '../actions/actions.js'
-import { addCar, populateCar } from '../controllers/apiController.js'
+import { changeNewVINActionCreator, addCarActionCreator } from '../actions/actions.js'
+import { fetchCarDetails,  } from '../controllers/apiController.js'
+import { addCarToDB } from '../controllers/dbApiController.js';
+
 
 function CardCreator(props) {
+
   const dispatch = useDispatch();
   const changeVIN = (inputVIN) => dispatch(changeNewVINActionCreator(inputVIN));
 
-  const newVIN = useSelector(state => state.cars.newVIN);
-  const carsList = useSelector(state => state.cars.carsList);
+
+  const {newVIN, carsList, sessionId} = useSelector(state => state.cars);
   const alreadyInList = (newVIN) => carsList.some(cars => cars.vin === newVIN);
   const createNewCar = (vin) => {
-    dispatch(addCar(vin));
-  }
+    fetchCarDetails(vin)
+      .then(carDetails => {
+        dispatch(addCarActionCreator(carDetails))
+        addCarToDB(sessionId, carDetails)
+      })
+}
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,11 +32,6 @@ function CardCreator(props) {
       }
     }
   };
-
-  const handleSubmit2 = (e) => {
-    e.preventDefault();
-    console.log('hi we are inside handleSubmit2');
-  }
 
   return (
     <section id="cardCreator">

@@ -1,5 +1,6 @@
 root {
   font-weight: 5px;
+  background-color: rgb(235, 255, 255)
 }
 .center {
   margin-left: auto;
@@ -22,6 +23,7 @@ root {
 #cardCreator {
   padding: 10px 10px;
   border: 1px dashed green
+  
 }
 .horizontal-form {
   display: flex;
@@ -29,6 +31,8 @@ root {
   align-items: center;
 }
 .card {
+  display: flex;
+  flex-flow: column nowrap;
   margin-top: 10px;
   padding: 10px 10px;
   width: 100%;
@@ -38,6 +42,12 @@ root {
   border: 1px solid rgba(0,0,0,0.1);
   border-radius: 5px;
   transition: all 80ms ease-out;
+}
+.card button {
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .card:hover {
@@ -57,4 +67,8 @@ root {
 
 #app-container * {
   font-family: sans-serif;
+}
+
+#session-picker {
+  margin-bottom: 20px;
 }

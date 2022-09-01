@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const {cookie} = require('./private')
+const {cookie} = require('../private')
 
 const proxyController = {};
 
@@ -25,7 +25,6 @@ proxyController.validateRequest = (req, res, next) => {
   // }));
 
   const requestUrl = req.originalUrl.split('').slice(9).join('');
-  console.log(requestUrl);
   const protocolAndDomain = requestUrl.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/)[0];
   if (!(protocolAndDomain in allowList)) return next(createErr({
     method: 'validateRequest',
@@ -47,9 +46,6 @@ proxyController.proxyRequest = (req, res, next) => {
   myHeaders['Target-URL'] =  'www.edmunds.com';
   myHeaders['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36';
   myHeaders['cookie'] = cookie;
-  console.log('time to call the url');
-  console.log(res.locals.requestUrl)
-  console.log({myHeaders});
   fetch(res.locals.requestUrl,
     {
       mode: 'cors',
@@ -58,7 +54,6 @@ proxyController.proxyRequest = (req, res, next) => {
       redirect: 'follow'
     }
   ).then(response => {
-    console.log('we have a response');
     if (response.ok) {
       res.locals.status = response.status;
       return response.text();
@@ -69,7 +64,6 @@ proxyController.proxyRequest = (req, res, next) => {
     }));
   })
     .then(response => {
-      console.log(response);
       res.locals.body = response
     })
     .then(() => next())

@@ -8,10 +8,11 @@ function CardsDisplay(props){
   for(const car of carsList){
     cards.push(<Card key={car.vin} {...car}/>);
   }
+  
 
   return(
     <section id="cardsDisplay">
-    {cards}
+    {cards.length > 0 ? cards: 'No cars yet!'}
     </section>
   );
 }
