@@ -1,4 +1,4 @@
-import { addCarActionCreator } from '../actions/actions.js';
+import { addCarActionCreator, updateCarActionCreator } from '../actions/actions.js';
 
 
 const NHTSA_URL = "https://vpic.nhtsa.dot.gov/api/vehicles";
@@ -24,14 +24,28 @@ const nhtsaPopulate = (vin) => {
 
 const EDMUNDS_BASE = 'https://www.edmunds.com'
 
-const edmundsPopulate = (payload) => {
-  const {make, model, year, vin} = payload;
+const edmundsPopulate = (car) => {
+  const {make, model, year, vin} = car;
   const edmundsUrl = EDMUNDS_BASE + `/${make.toLowerCase()}/${model.toLowerCase()}/${year}/vin/${vin}/`;
-  return fetch(edmundsUrl)
+  console.log('about to fetch '  + 'localhost:3000/sources/' + edmundsUrl);
+  return fetch('http://localhost:3000/sources/' + edmundsUrl,
+  {
+    method: 'GET',
+    headers: {'Target-URL': 'www.edmunds.com'},
+    redirect: 'follow'
+  }
+  )
     .then(resp => {
-      if(resp.ok) return {...payload, edmundsUrl};
-      return {...payload};
-    });
+      if(!resp.ok) return car
+      return resp.json()
+    })
+    .then(data => {
+      console.log(data);
+      return {...car, ...data, edmundsUrl};
+    })
+    .catch(err => {
+      return car
+    })
 }
 
 
@@ -39,6 +53,6 @@ console.log(nhtsaPopulate('4S4BSETC9K3341075'))
 
 export const addCar = (vin) => {
   return nhtsaPopulate(vin)
-    // .then((payload) => edmundsPopulate(payload))
-    .then((payload) => addCarActionCreator(payload));
+    .then(payload => edmundsPopulate(payload))
+    .then(payload => addCarActionCreator(payload));
 }

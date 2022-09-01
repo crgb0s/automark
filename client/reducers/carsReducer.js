@@ -12,8 +12,8 @@
  import * as types from '../constants/actionTypes';
 
  const initialState = {
-   totalCars: 1,
-   carsList: [{vin: '123'}],
+   totalCars: 0,
+   carsList: [],
    newVIN: '',
  };
  
@@ -54,6 +54,15 @@
          totalCars,
          carsList
        };
+     }
+     case types.UPDATE_CAR: {
+       const carsList = state.carsList.slice();
+       carToUpdate = carsList.find((car) => car.vin = action.payload.vin);
+       carToUpdate = {...carToUpdate, ...action.payload};
+       return {
+         ...state,
+         carsList
+       }
      }
  
      default: {

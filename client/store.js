@@ -9,7 +9,7 @@
  * ************************************
  */
 
- import { applyMiddleware, configureStore } from '@reduxjs/toolkit'
+ import { configureStore } from '@reduxjs/toolkit'
  import reducer from './reducers/index';
  
  const vanillaPromise = store => next => action => {

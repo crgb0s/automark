@@ -1,14 +1,17 @@
 import React from 'react';
 
-function Card({vin, make, model, year, trim, edmundsUrl}) {
+function Card(props) {
+  const {vin, make, model, year, trim, edmundsUrl, mileage, hp} = props;
+  console.log(props);
+  let listingInfo;
+  if(edmundsUrl){
+      listingInfo = `According to Edmunds, I have ${hp} horsepower and a current odometer reading of ${mileage} miles`;
+  };
   return(
+
     <section className="card">
-      I am a car, and my VIN is: {vin}.
-      My make is {make ? make : 'not available'}.
-      My model is {model ? model : 'not available'}.
-      My year is {year ? year : 'not available'}.
-      My trim package is {trim ? trim : 'not available'}.
-      My edmundsUrl is {edmundsUrl ? edmundsUrl : 'not available'}
+      I am a {year} {make} {model}, and my VIN is: {vin}.<br/>
+      {listingInfo ? listingInfo : "No online listings found"}
     </section>
   );
 }

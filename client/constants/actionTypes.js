@@ -18,3 +18,5 @@ export const ADD_CAR = "ADD_CAR";
 export const DELETE_CAR = "DELETE_CARD";
 
 export const CHANGE_VIN = "CHANGE_VIN";
+
+export const UPDATE_CAR = "UPDATE_CAR";

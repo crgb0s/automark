@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { changeNewVINActionCreator } from '../actions/actions.js'
-import { addCar } from '../controllers/apiController.js'
+import { addCar, populateCar } from '../controllers/apiController.js'
 
 function CardCreator(props) {
   const dispatch = useDispatch();

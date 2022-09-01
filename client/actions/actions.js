@@ -27,3 +27,8 @@ export const changeNewVINActionCreator = newVIN => ({
   type: types.CHANGE_VIN,
   payload: newVIN
 });
+
+export const updateCarActionCreator = updates => ({
+  type: types.UPDATE_CAR,
+  payload: updates
+});
